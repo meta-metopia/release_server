@@ -7,6 +7,7 @@ from bson.json_util import dumps, loads
 from fastapi import FastAPI, Depends, UploadFile, Form, HTTPException
 from fastapi.security import HTTPBasicCredentials
 from pymongo import MongoClient
+from fastapi.middleware.cors import CORSMiddleware
 
 from auth import auth
 from controllers.release_controller import ReleaseController
@@ -14,6 +15,14 @@ from models import CreateReleaseDto
 from utils.check_naming import check_format
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 logging.basicConfig(level=logging.INFO)
 
