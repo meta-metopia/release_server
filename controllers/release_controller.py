@@ -18,8 +18,7 @@ public_url = os.getenv("PUBLIC_URL")
 class ReleaseController(Controller):
     def __init__(self, client: MongoClient, s3_client):
         super().__init__(client=client)
-        self.collection.create_index("name", unique=True)
-        self.collection.create_index("version", unique=True)
+        self.collection.create_index([("name", 1), ("version", 1)], unique=True)
         self.s3_client = s3_client
 
     def list(self, page: int, per: int) -> Pagination[Release]:
@@ -35,7 +34,8 @@ class ReleaseController(Controller):
         if per < 1:
             raise HTTPException(status_code=400, detail="Per must be greater than 0")
 
-        results = list(self.collection.find({}, {"_id": 0}).skip((page - 1) * per).limit(per))
+        results = list(
+            self.collection.find({}, {"_id": 0}).skip((page - 1) * per).limit(per).sort([("name", 1), ("version", -1)]))
         total = self.collection.count_documents({})
         total_pages = total // per + 1
         return Pagination(page=page, per=per, total=total, total_pages=total_pages, items=results)

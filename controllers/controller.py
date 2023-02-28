@@ -8,5 +8,5 @@ class Controller:
 
     def __init__(self, client: MongoClient):
         self.client = client
-        self.db = self.client["kongshum-release"]
+        self.db = self.client["release"]
         self.collection: Collection = self.db["releases"]
