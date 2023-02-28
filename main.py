@@ -25,7 +25,16 @@ region_name = os.getenv("AWS_REGION_NAME")
 aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY")
 
-mongo_client = MongoClient(db_url, tlsCAFile=certifi.where())
+logging.info(f"DB_URL: {db_url}")
+logging.info(f"AWS_ENDPOINT_URL: {endpoint_url}")
+logging.info(f"PUBLIC_URL: {public_url}")
+logging.info(f"AWS_BUCKET_NAME: {bucket_name}")
+logging.info(f"AWS_REGION_NAME: {region_name}")
+logging.info(f"AWS_ACCESS_KEY_ID: {aws_access_key_id}")
+logging.info(f"AWS_SECRET_ACCESS_KEY: {aws_secret_access_key}")
+
+
+mongo_client = MongoClient(db_url, tlsCAFile=certifi.where() if db_url.startswith("mongodb+srv") else None)
 s3_client = boto3.client('s3',
                          aws_access_key_id=aws_access_key_id,
                          aws_secret_access_key=aws_secret_access_key,

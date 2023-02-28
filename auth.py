@@ -5,8 +5,8 @@ from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasicCredentials, HTTPBasic
 
 security = HTTPBasic()
-username = os.environ["USERNAME"]
-password = os.environ["PASSWORD"]
+username = os.getenv("USERNAME")
+password = os.getenv("PASSWORD")
 
 
 def auth(credentials: HTTPBasicCredentials = Depends(security)):
